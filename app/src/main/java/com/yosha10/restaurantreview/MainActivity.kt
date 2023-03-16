@@ -36,14 +36,13 @@ class MainActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-        mainViewModel.listReview.observe(this) { consumerReviews ->
-            setReviewData(consumerReviews)
+        mainViewModel.listReview.observe(this) { costumerReviews ->
+            setReviewData(costumerReviews)
         }
 
         mainViewModel.isLoading.observe(this) {
             showLoading(it)
         }
-//        findRestaurant()
 
         binding.btnSend.setOnClickListener { view ->
             mainViewModel.postReview(binding.edReview.text.toString())
@@ -51,57 +50,6 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
-
-//    private fun postReview(review: String) {
-//        showLoading(true)
-//        val client = ApiConfig.getApiService().postReview(RESTAURANT_ID, "Yosha10", review)
-//        client.enqueue(object : Callback<PostReviewResponse> {
-//            override fun onResponse(
-//                call: Call<PostReviewResponse>,
-//                response: Response<PostReviewResponse>
-//            ) {
-//                showLoading(false)
-//                val responseBody = response.body()
-//                if (response.isSuccessful && responseBody != null) {
-//                    setReviewData(responseBody.customerReviews)
-//                } else {
-//                    Log.e(TAG, "onFailure: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<PostReviewResponse>, t: Throwable) {
-//                showLoading(false)
-//                Log.e(TAG, "onFailure: ${t.message}")
-//            }
-//        })
-//    }
-
-//    private fun findRestaurant() {
-//        showLoading(true)
-//        val client = ApiConfig.getApiService().getRestaurant(RESTAURANT_ID)
-//        client.enqueue(object : Callback<RestaurantResponse> {
-//            override fun onResponse(
-//                call: Call<RestaurantResponse>,
-//                response: Response<RestaurantResponse>
-//            ) {
-//                showLoading(false)
-//                if (response.isSuccessful) {
-//                    val responseBody = response.body()
-//                    if (responseBody != null) {
-//                        setRestaurantData(responseBody.restaurant)
-//                        setReviewData(responseBody.restaurant.customerReviews)
-//                    }
-//                } else {
-//                    Log.e(TAG, "onFailure: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<RestaurantResponse>, t: Throwable) {
-//                showLoading(false)
-//                Log.e(TAG, "onFailure: ${t.message}", )
-//            }
-//        })
-//    }
 
     private fun setRestaurantData(restaurant: Restaurant) {
         binding.tvTitle.text = restaurant.name

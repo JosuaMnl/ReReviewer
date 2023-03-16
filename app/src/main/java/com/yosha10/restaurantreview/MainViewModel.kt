@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     private val _restaurant = MutableLiveData<Restaurant>()
     val restaurant: LiveData<Restaurant> = _restaurant
@@ -33,11 +33,8 @@ class MainViewModel: ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        _restaurant.value = response.body()?.restaurant
-                        _listReview.value = response.body()?.restaurant?.customerReviews
-                    }
+                    _restaurant.value = response.body()?.restaurant
+                    _listReview.value = response.body()?.restaurant?.customerReviews
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -50,7 +47,7 @@ class MainViewModel: ViewModel() {
         })
     }
 
-    private fun postReview(review: String) {
+    fun postReview(review: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().postReview(RESTAURANT_ID, "Yosha10", review)
         client.enqueue(object : Callback<PostReviewResponse> {
@@ -59,8 +56,7 @@ class MainViewModel: ViewModel() {
                 response: Response<PostReviewResponse>
             ) {
                 _isLoading.value = false
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
+                if (response.isSuccessful) {
                     _listReview.value = response.body()?.customerReviews
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
@@ -74,7 +70,7 @@ class MainViewModel: ViewModel() {
         })
     }
 
-    companion object{
+    companion object {
         private const val TAG = "MainViewModel"
         private const val RESTAURANT_ID = "uewq1zg2zlskfw1e867"
     }
